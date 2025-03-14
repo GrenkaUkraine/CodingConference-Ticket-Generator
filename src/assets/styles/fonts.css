@@ -1,0 +1,15 @@
+:root {
+  font-family: 'Inconsolata', system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+h1 {
+    @apply text-6xl font-black text-text-primary tracking-[-1.2px];
+}
+
+h2 {
+    @apply text-2xl font-medium text-text-secondary tracking-[-0.48px];
+}
+
+h3 {
+    @apply text-xl font-medium text-text-secondary tracking-[-0.4px];
+}
