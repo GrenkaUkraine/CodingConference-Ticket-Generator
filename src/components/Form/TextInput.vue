@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
+import StateInfo from './StateInfo.vue';
 
 interface Props {
     placeholder?: string;
@@ -7,6 +8,8 @@ interface Props {
     modelValue?: string;
     textTemplateOnlyRender?: boolean;
     hideTemplateWhenEmpty?: boolean;
+    error?: boolean;
+    errorMessage?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -14,7 +17,9 @@ const props = withDefaults(defineProps<Props>(), {
     textTemplate: '',
     modelValue: '',
     textTemplateOnlyRender: false,
-    hideTemplateWhenEmpty: false
+    hideTemplateWhenEmpty: false,
+    error: false,
+    errorMessage: 'Please check your input'
 });
 
 const emit = defineEmits<{
@@ -88,11 +93,17 @@ const handleKeydown = (event: KeyboardEvent) => {
 </script>
 
 <template>
-    <input 
-        class="w-full h-13.5 flex flex-col items-center justify-start px-4 py-2 glass-element text-text-primary placeholder:text-text-secondary rounded-xl" 
-        :placeholder="placeholder"
-        :value="displayValue"
-        @input="handleInput"
-        @keydown="handleKeydown"
-    />
+    <div class="flex flex-col gap-3 w-full">
+        <input 
+            class="w-full h-13.5 flex flex-col items-center justify-start px-4 py-2 glass-element text-text-primary placeholder:text-text-secondary rounded-xl" 
+            :class="{ '!border-error': props.error }"
+            :placeholder="placeholder"
+            :value="displayValue"
+            @input="handleInput"
+            @keydown="handleKeydown"
+        />
+        <StateInfo v-if="props.error" error>
+            {{ props.errorMessage }}
+        </StateInfo>
+    </div>
 </template>

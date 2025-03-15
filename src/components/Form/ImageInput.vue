@@ -1,13 +1,37 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import IconUpload from '../../assets/icons/icon-upload.svg';
 import ImageInputButton from './ImageInputButton.vue';
 import StateInfo from './StateInfo.vue';
+
+interface Props {
+    modelValue?: string | null;
+    error?: boolean;
+    errorMessage?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    modelValue: null,
+    error: false,
+    errorMessage: ''
+});
+
+const emit = defineEmits<{
+    'update:modelValue': [value: string | null];
+}>();
 
 const selectedImage = ref<string | null>(null);
 const fileInput = ref<HTMLInputElement | null>(null);
 const hasError = ref(false);
 const errorMessage = ref('');
+
+watch(() => props.modelValue, (newValue) => {
+    selectedImage.value = newValue;
+}, { immediate: true });
+
+watch(() => selectedImage.value, (newValue) => {
+    emit('update:modelValue', newValue);
+});
 
 const validateImage = (file: File): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -60,8 +84,11 @@ const handleFileSelect = async (event: Event) => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 selectedImage.value = e.target?.result as string;
+                emit('update:modelValue', selectedImage.value);
             };
             reader.readAsDataURL(file);
+        } else {
+            emit('update:modelValue', null);
         }
     }
 };
@@ -78,6 +105,7 @@ const removeImage = () => {
     if (fileInput.value) {
         fileInput.value.value = '';
     }
+    emit('update:modelValue', null);
 };
 
 const changeImage = () => {
@@ -100,8 +128,11 @@ const handleDrop = async (event: DragEvent) => {
             const reader = new FileReader();
             reader.onload = (e) => {
                 selectedImage.value = e.target?.result as string;
+                emit('update:modelValue', selectedImage.value);
             };
             reader.readAsDataURL(file);
+        } else {
+            emit('update:modelValue', null);
         }
     }
 };
@@ -110,6 +141,7 @@ const handleDrop = async (event: DragEvent) => {
 <template>
     <div class="flex flex-col gap-3 w-full">
         <div class="w-full h-32 flex flex-col items-center justify-center gap-4 glass-element rounded-xl !border-none dashed-border user-select-none"
+            :class="{ '!border-error': props.error }"
             @dragover="handleDragOver" @drop="handleDrop">
             <input type="file" ref="fileInput" @change="handleFileSelect" accept="image/*"
                 class="hidden user-select-none" />
@@ -133,8 +165,8 @@ const handleDrop = async (event: DragEvent) => {
                 </div>
             </template>
         </div>
-        <StateInfo :error="hasError">
-            {{ hasError ? errorMessage : 'Upload a your photo (JPG or PNG, max 500KB).' }}
+        <StateInfo :error="hasError || props.error">
+            {{ hasError ? errorMessage : props.error ? props.errorMessage : 'Upload a your photo (JPG or PNG, max 500KB).' }}
         </StateInfo>
     </div>
 </template>
