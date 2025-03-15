@@ -16,6 +16,15 @@ const emailError = ref(false);
 const githubUsernameError = ref(false);
 const avatarImageError = ref(false);
 
+const emit = defineEmits<{
+    'submit': [formData: {
+        fullName: string;
+        email: string;
+        githubUsername: string;
+        avatarImage: string | null;
+    }];
+}>();
+
 const validateEmail = (email: string): boolean => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -65,7 +74,12 @@ const handleSubmit = () => {
         return;
     }
 
-    // TODO: Add form submission logic here
+    emit('submit', {
+        fullName: fullName.value,
+        email: email.value,
+        githubUsername: githubUsername.value,
+        avatarImage: avatarImage.value
+    });
 };
 </script>
 
