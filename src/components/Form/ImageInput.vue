@@ -179,7 +179,7 @@ const handleKeydown = (event: KeyboardEvent) => {
                 </div>
             </template>
         </div>
-        <StateInfo :error="hasError || props.error">
+        <StateInfo noInitialAnimation :error="hasError || props.error">
             {{ hasError ? errorMessage : props.error ? props.errorMessage : 'Upload a your photo (JPG or PNG, max 500KB).' }}
         </StateInfo>
     </div>
