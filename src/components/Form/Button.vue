@@ -22,7 +22,7 @@ const handleClick = (event: MouseEvent) => {
 
 <template>
     <button :type="type" :disabled="disabled" @click="handleClick"
-        class="w-full h-13.5 flex items-center justify-center rounded-xl font-bold text-xl bg-accent text-black">
+        class="w-full h-13.5 flex items-center justify-center rounded-xl font-bold text-xl bg-accent text-black focus-outline">
         <slot />
     </button>
 </template>

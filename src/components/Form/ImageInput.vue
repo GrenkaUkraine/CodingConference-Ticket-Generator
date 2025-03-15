@@ -136,19 +136,33 @@ const handleDrop = async (event: DragEvent) => {
         }
     }
 };
+
+const handleKeydown = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' && !selectedImage.value) {
+        openFileDialog();
+    }
+};
 </script>
 
 <template>
     <div class="flex flex-col gap-3 w-full">
-        <div class="w-full h-32 flex flex-col items-center justify-center gap-4 glass-element rounded-xl !border-none dashed-border user-select-none"
-            :class="{ '!border-error': props.error }"
-            @dragover="handleDragOver" @drop="handleDrop">
+        <div class="w-full h-32 flex flex-col items-center justify-center gap-4 glass-element rounded-xl !border-none dashed-border select-none focus-outline"
+            :class="{ 
+                '!border-error': props.error, 
+                'cursor-pointer glass-element-can-hover': !selectedImage 
+            }"
+            tabindex="0"
+            @dragover="handleDragOver" 
+            @drop="handleDrop" 
+            @keydown="handleKeydown"
+            @click="!selectedImage && openFileDialog()">
             <input type="file" ref="fileInput" @change="handleFileSelect" accept="image/*"
                 class="hidden user-select-none" />
 
             <template v-if="!selectedImage">
-                <button class="w-13 h-13 rounded-xl glass-element flex items-center justify-center select-none"
-                    @click="openFileDialog">
+                <button class="w-13 h-13 rounded-xl glass-element flex items-center justify-center select-none focus-outline"
+                    tabindex="-1"
+                    @click.stop="openFileDialog">
                     <IconUpload />
                 </button>
                 <h3 class="text-center !font-normal tracking-[-1px] select-none">Drag and drop or click to upload</h3>
@@ -160,8 +174,8 @@ const handleDrop = async (event: DragEvent) => {
                     <img :src="selectedImage" alt="Selected image" class="w-full h-full object-cover">
                 </div>
                 <div class="flex items-center justify-center gap-2">
-                    <ImageInputButton variant="primary" @click="removeImage">Remove Image</ImageInputButton>
-                    <ImageInputButton variant="secondary" @click="changeImage">Change Image</ImageInputButton>
+                    <ImageInputButton variant="primary" @click.stop="removeImage">Remove Image</ImageInputButton>
+                    <ImageInputButton variant="secondary" @click.stop="changeImage">Change Image</ImageInputButton>
                 </div>
             </template>
         </div>

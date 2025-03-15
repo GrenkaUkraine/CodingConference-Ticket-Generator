@@ -24,7 +24,7 @@ const handleClick = (event: MouseEvent) => {
 
 <template>
     <button :type="type" :disabled="disabled" @click="handleClick"
-        class="w-full h-5.5 flex items-center justify-center rounded-sm px-2 text-xs font-medium glass-element text-text-primary tracking-[-0.24px]"
+        class="w-full h-5.5 flex items-center justify-center rounded-sm px-2 text-xs font-medium glass-element text-text-primary tracking-[-0.24px] focus-outline"
         :class="[
             variant === 'primary' ? 'underline decoration-text-primary underline-offset-2' : ''
         ]">

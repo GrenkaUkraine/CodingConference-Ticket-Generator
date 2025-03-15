@@ -95,7 +95,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 <template>
     <div class="flex flex-col gap-3 w-full">
         <input 
-            class="w-full h-13.5 flex flex-col items-center justify-start px-4 py-2 glass-element text-text-primary placeholder:text-text-secondary rounded-xl" 
+            class="w-full h-13.5 flex flex-col items-center justify-start px-4 py-2 glass-element glass-element-can-hover text-text-primary placeholder:text-text-secondary rounded-xl focus-outline" 
             :class="{ '!border-error': props.error }"
             :placeholder="placeholder"
             :value="displayValue"
